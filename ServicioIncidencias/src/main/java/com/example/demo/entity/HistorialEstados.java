@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "historial_estados")
 public class HistorialEstados {
 	
 	@Id
@@ -29,13 +31,12 @@ public class HistorialEstados {
 	@Column(insertable = false, updatable = false)
 	private Long id;
 	
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id", nullable = false)
-	private Incidencias incidenciasId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "incidencias_id")
+	private Incidencias incidencia;
     
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private Estado estado = Estado.REPORTADO;
+    private Estado estado;
     
     private LocalDateTime fechaCambio;
     
@@ -43,6 +44,4 @@ public class HistorialEstados {
     private String comentarios;
     
     private Long usuarioModificador;
-    
-
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "incidencias")
 public class Incidencias {
 	
 	@Id
@@ -27,15 +29,15 @@ public class Incidencias {
 	@Column(insertable = false, updatable = false)
 	private Long id;
 	
-	@Column(length = 50)
+	@Column(nullable = false, length = 50)
 	private String titulo;
 	
-	@Column(length = 250)
+	@Column(nullable = false, length = 250)
 	private String descripcion;
 	
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id", nullable = false)
-	private CatalogoTipoIncidencias tipoIncidenciaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_incidencia_id", nullable = false)
+	private CatalogoTipoIncidencias tipoIncidencia;
     
     private LocalDateTime fechaReporte;
     
@@ -46,5 +48,4 @@ public class Incidencias {
     private Long departamentoId;
     
     private Long personalId;
-
 }
