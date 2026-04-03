@@ -32,42 +32,60 @@
 	</properties>
 	
 	<dependencies>
+    
+    <!-- Spring Boot Starter Web para crear servicios REST -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+	<!-- Spring Cloud Starter Netflix Eureka Client -->
     <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     </dependency>
 
+	<!-- Spring Boot Starter Data JPA para la persistencia de datos -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+    
+    <!-- Mysql -->
     <dependency>
         <groupId>com.mysql</groupId>
         <artifactId>mysql-connector-j</artifactId>
         <scope>runtime</scope>
     </dependency>
 
+	<!-- Spring Boot DevTools para el desarrollo -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-devtools</artifactId>
         <scope>runtime</scope>
         <optional>true</optional>
     </dependency>
+    
+    <!-- Lombok para reducir el código -->
     <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <optional>true</optional>
     </dependency>
+    
+    <!-- Spring Boot Starter Test -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa-test</artifactId>
         <scope>test</scope>
     </dependency>
+    
+    <!-- Spring Cloud Starter OpenFeign para la comunicación entre microservicios -->
+    <dependency>
+    	<groupId>org.springframework.cloud</groupId>
+    	<artifactId>spring-cloud-starter-openfeign</artifactId>
+	</dependency>
+
 </dependencies>
 
 	<dependencyManagement>
