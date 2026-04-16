@@ -61,11 +61,10 @@ public class IncidenciasController {
     @PatchMapping("/{id}/asignar")
     public ResponseEntity<IncidenciasDTO> asignarResponsable(
             @PathVariable Long id,
-            @RequestParam Long departamentoId,
             @RequestParam Long personalId,
             @RequestParam Long usuarioAsignador) {
         
-        IncidenciasDTO actualizada = incidenciasService.asignarResponsable(id, departamentoId, personalId, usuarioAsignador);
+        IncidenciasDTO actualizada = incidenciasService.asignarResponsable(id, personalId, usuarioAsignador);
         return ResponseEntity.ok(actualizada);
     }
 }

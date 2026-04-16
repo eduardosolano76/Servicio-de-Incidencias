@@ -12,6 +12,7 @@ import com.example.demo.client.ClimaClient;
 import com.example.demo.client.GestionClient;
 import com.example.demo.client.UbicacionClient;
 import com.example.demo.dto.ClimaResponseDTO;
+import com.example.demo.dto.CuadrillaResponseDTO;
 import com.example.demo.dto.IncidenciasDTO;
 import com.example.demo.dto.PersonalResponseDTO;
 import com.example.demo.dto.UbicacionResponseDTO;
@@ -112,16 +113,9 @@ public class IncidenciasService {
     
     // Asignar responsable a la incidencia
     @Transactional
-    public IncidenciasDTO asignarResponsable(Long id, Long departamentoId, Long personalId, Long usuarioAsignador) {
+    public IncidenciasDTO asignarResponsable(Long id, Long personalId, Long usuarioAsignador) {
         
-        // VALIDACIÓN 1: Verificar que el Departamento existe
-        try {
-            gestionClient.obtenerDepartamento(departamentoId);
-        } catch (FeignException.NotFound e) {
-            throw new RuntimeException("Error: El departamento especificado no existe en el sistema.");
-        }
-
-        // VALIDACIÓN 2: Verificar que el Personal existe y está disponible
+        // 1. Verificar que el Personal existe y está disponible
         PersonalResponseDTO personal;
         try {
             personal = gestionClient.obtenerPersonal(personalId);
@@ -133,19 +127,29 @@ public class IncidenciasService {
             throw new RuntimeException("Error: El empleado " + personal.getNombre() + " no está disponible en este momento.");
         }
 
-        // Si pasamos las validaciones, procedemos con la asignación
+        // 2. Obtener la cuadrilla para sacar el departamentoId
+        if (personal.getCuadrillaId() == null) {
+            throw new RuntimeException("Error: El personal devuelto no tiene una cuadrilla asignada.");
+        }
+        
+        CuadrillaResponseDTO cuadrilla;
+        try {
+            cuadrilla = gestionClient.obtenerCuadrilla(personal.getCuadrillaId());
+        } catch (FeignException.NotFound e) {
+            throw new RuntimeException("Error: La cuadrilla del empleado no existe en el sistema.");
+        }
+
+        // 3. Proceder con la asignación
         Incidencias incidencia = incidenciasRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
 
-        incidencia.setDepartamentoId(departamentoId);
         incidencia.setPersonalId(personalId);
-        incidencia.setEstado(Estado.EN_PROCESO); 
+        incidencia.setDepartamentoId(cuadrilla.getDepartamentoId()); // Se asigna el extraído de la cuadrilla
 
         Incidencias actualizada = incidenciasRepository.save(incidencia);
 
-        // Registramos en el historial usando el nombre real del empleado
-        registrarHistorial(actualizada, Estado.EN_PROCESO, "Personal asignado: " + personal.getNombre(), usuarioAsignador);
-
+        // 4. Guardar historial y bloquear personal
+        registrarHistorial(actualizada, actualizada.getEstado(), "Personal asignado: " + personal.getNombre(), usuarioAsignador);
         gestionClient.cambiarDisponibilidad(personalId, false);
         
         return convertirADTO(actualizada);

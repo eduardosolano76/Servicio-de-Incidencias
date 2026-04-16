@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PersonalResponseDTO {
+public class CuadrillaResponseDTO {
 	
 	private Long id;
-    private String nombre;
-    private Boolean disponible;
-    private Long cuadrillaId;
+    private Long departamentoId;
 
 }

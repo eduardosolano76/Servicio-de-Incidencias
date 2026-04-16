@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.dto.CuadrillaResponseDTO;
 import com.example.demo.dto.DepartamentoResponseDTO;
 import com.example.demo.dto.PersonalResponseDTO;
 
@@ -21,6 +22,8 @@ public interface GestionClient {
     @PatchMapping("/api/gestion/personal/{id}/disponibilidad")
     PersonalResponseDTO cambiarDisponibilidad(
             @PathVariable("id") Long id, 
-            @RequestParam("disponible") Boolean disponible
-    );
+            @RequestParam("disponible") Boolean disponible);
+    
+    @GetMapping("/api/gestion/cuadrillas/{id}")
+    CuadrillaResponseDTO obtenerCuadrilla(@PathVariable("id") Long id);
 }
