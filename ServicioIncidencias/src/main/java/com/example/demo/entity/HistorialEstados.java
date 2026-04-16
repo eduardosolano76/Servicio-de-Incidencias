@@ -38,10 +38,12 @@ public class HistorialEstados {
     @Enumerated(EnumType.STRING)
     private Estado estado;
     
+    @Column(name = "fecha_cambio")
     private LocalDateTime fechaCambio;
     
     @Column(length = 250)
     private String comentarios;
     
+    @Column(name = "usuario_modificador")
     private Long usuarioModificador;
 }

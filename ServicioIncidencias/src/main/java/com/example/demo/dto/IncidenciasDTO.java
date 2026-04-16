@@ -2,6 +2,8 @@ package com.example.demo.dto;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.entity.Estado;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +27,7 @@ public class IncidenciasDTO {
     private Long ubicacionId;
     private Long departamentoId;
     private Long personalId;
+    
+    private Estado estado;
+    private String alertaClima;
 }

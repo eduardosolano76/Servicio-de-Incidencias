@@ -26,6 +26,6 @@ public class CatalogoTipoIncidencias {
 	@Column(nullable = false, length = 50)
 	private String nombre;
 	
-	@Column(nullable = false)
+	@Column(name = "prioridad_base", nullable = false)
 	private Integer prioridadBase;
 }
