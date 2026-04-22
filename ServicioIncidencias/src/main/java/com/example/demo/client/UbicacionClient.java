@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.dto.UbicacionResponseDTO;
 
-@FeignClient(name = "UBICACION") // ¡Busca la IP directo en Eureka!
+@FeignClient(name = "UBICACION") 
 public interface UbicacionClient {
 
     @GetMapping("/api/ubicaciones/{id}")

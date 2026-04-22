@@ -67,4 +67,5 @@ public class IncidenciasController {
         IncidenciasDTO actualizada = incidenciasService.asignarResponsable(id, personalId, usuarioAsignador);
         return ResponseEntity.ok(actualizada);
     }
+    
 }

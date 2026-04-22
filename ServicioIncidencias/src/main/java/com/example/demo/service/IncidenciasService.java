@@ -66,7 +66,6 @@ public class IncidenciasService {
 		
 		Incidencias incidenciaGuardada = incidenciasRepository.save(incidencia);
 		
-		// AÑADIDO: Registrar el primer paso en el Historial
 		registrarHistorial(incidenciaGuardada, Estado.REPORTADO, "Reporte inicial creado", dto.getUsuarioId());
 		
 		IncidenciasDTO respuesta = convertirADTO(incidenciaGuardada);
@@ -181,4 +180,5 @@ public class IncidenciasService {
         dto.setPersonalId(incidencia.getPersonalId());
         return dto;
     }
+   
 }

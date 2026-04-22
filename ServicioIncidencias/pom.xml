@@ -1,98 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>4.0.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.itch</groupId>
 	<artifactId>ServicioIncidencias</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ServicioIncidencias</name>
-	<description>Es el microservicio principal del sistema. Gestiona el ciclo de vida del reporte y consume la API del clima para sugerencias operativas (Si la API reporta &quot;Tormenta&quot; o &quot;Lluvia intensa&quot;: El sistema muestra una alerta, por ejemplo: &quot;No se recomienda enviar cuadrillas para reparación de baches o configuración de semáforos debido al clima&quot;) .</description>
-	<url/>
+	<description>Es el microservicio principal del sistema. Gestiona el ciclo de
+		vida del reporte y consume la API del clima para sugerencias operativas
+		(Si la API reporta &quot;Tormenta&quot; o &quot;Lluvia intensa&quot;: El
+		sistema muestra una alerta, por ejemplo: &quot;No se recomienda enviar
+		cuadrillas para reparación de baches o configuración de semáforos debido
+		al clima&quot;) .</description>
+	<url />
 	<licenses>
-		<license/>
+		<license />
 	</licenses>
 	<developers>
-		<developer/>
+		<developer />
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
 	</scm>
 	<properties>
 		<java.version>21</java.version>
 		<spring-cloud.version>2025.1.1</spring-cloud.version>
 	</properties>
-	
+
 	<dependencies>
-    
-    <!-- Spring Boot Starter Web para crear servicios REST -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
 
-	<!-- Spring Cloud Starter Netflix Eureka Client -->
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-    </dependency>
+		<!-- Spring Boot Starter Web para crear servicios REST -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 
-	<!-- Spring Boot Starter Data JPA para la persistencia de datos -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    
-    <!-- Mysql -->
-    <dependency>
-        <groupId>com.mysql</groupId>
-        <artifactId>mysql-connector-j</artifactId>
-        <scope>runtime</scope>
-    </dependency>
+		<!-- Spring Cloud Starter Netflix Eureka Client -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 
-	<!-- Spring Boot DevTools para el desarrollo -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-devtools</artifactId>
-        <scope>runtime</scope>
-        <optional>true</optional>
-    </dependency>
-    
-    <!-- Lombok para reducir el código -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <optional>true</optional>
-    </dependency>
-    
-    <!-- Spring Boot Starter Test -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa-test</artifactId>
-        <scope>test</scope>
-    </dependency>
-    
-    <!-- Spring Cloud Starter OpenFeign para la comunicación entre microservicios -->
-    <dependency>
-    	<groupId>org.springframework.cloud</groupId>
-    	<artifactId>spring-cloud-starter-openfeign</artifactId>
-	</dependency>
-	
-<dependency>
-    <groupId>io.github.openfeign</groupId>
-    <artifactId>feign-hc5</artifactId>
-</dependency>
+		<!-- Spring Boot Starter Data JPA para la persistencia de datos -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 
-</dependencies>
-	
+		<!-- Mysql -->
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Spring Boot DevTools para el desarrollo -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Lombok para reducir el código -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Spring Boot Starter Test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Spring Cloud Starter OpenFeign para la comunicación entre
+		microservicios -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-hc5</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ayuntamiento</groupId>
+			<artifactId>security-lib</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth</groupId>
+			<artifactId>client-sdk</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+
+	</dependencies>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -104,6 +124,15 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/TU_USUARIO_DE_GITHUB/security-lib</url>
+		</repository>
+	</distributionManagement>
+
 
 	<build>
 		<plugins>

@@ -13,5 +13,7 @@ public interface IncidenciasRepository extends JpaRepository<Incidencias, Long> 
     List<Incidencias> findByDepartamentoId(Long departamentoId);
     
     List<Incidencias> findByPersonalId(Long personalId);
+    
+    
 
 }
