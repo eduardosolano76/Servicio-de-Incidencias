@@ -58,4 +58,7 @@ public class Incidencias {
     
     @Column(name = "personal_id")
     private Long personalId;
+    
+    @Column(name = "alerta_clima", length = 250)
+    private String alertaClima;
 }

@@ -42,18 +42,9 @@ public class IncidenciasService {
   
     @Transactional
 	public IncidenciasDTO crearIncidencia(IncidenciasDTO dto) {
-		UbicacionResponseDTO ubicacion = ubicacionClient.obtenerUbicacionPorId(dto.getUbicacionId());
-		
-		ClimaResponseDTO clima = climaClient.obtenerClimaActual(
-				ubicacion.getLatitud(), ubicacion.getLongitud(), apiKey, "es", "metric"
-		);
-		
-		String condicion = clima.getCondicionPrincipal().toLowerCase();
-		String alerta = null;
-		if (condicion.contains("tormenta") || condicion.contains("lluvia")) {
-			alerta = "Alerta climática: No se recomienda enviar cuadrillas para reparación debido al clima (" + condicion + ").";
-		}
-		
+    	
+		String alerta = evaluarAlertaClimatica(dto.getUbicacionId());
+	
 		Incidencias incidencia = new Incidencias();
 		incidencia.setTitulo(dto.getTitulo());
 		incidencia.setDescripcion(dto.getDescripcion());
@@ -63,14 +54,13 @@ public class IncidenciasService {
 		incidencia.setEstado(Estado.REPORTADO); 
 		incidencia.setUsuarioId(dto.getUsuarioId());
 		incidencia.setUbicacionId(dto.getUbicacionId());
+		incidencia.setAlertaClima(alerta);
 		
 		Incidencias incidenciaGuardada = incidenciasRepository.save(incidencia);
 		
-		registrarHistorial(incidenciaGuardada, Estado.REPORTADO, "Reporte inicial creado", dto.getUsuarioId());
-		
-		IncidenciasDTO respuesta = convertirADTO(incidenciaGuardada);
-		respuesta.setAlertaClima(alerta); 
-		return respuesta;
+		registrarHistorial(incidenciaGuardada, Estado.REPORTADO, "Reporte inicial creado", dto.getUsuarioId(), alerta);
+
+		return convertirADTO(incidenciaGuardada);
 	}
     
     // Consultar todas las incidencias
@@ -92,11 +82,19 @@ public class IncidenciasService {
     public IncidenciasDTO cambiarEstado(Long id, Estado nuevoEstado, String comentarios, Long usuarioModificador) {
         Incidencias incidencia = incidenciasRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incidencia no encontrada"));
-
+        
+        if (incidencia.getPersonalId() == null) {
+            throw new RuntimeException("Error: No se puede cambiar el estado a " + nuevoEstado + " porque la incidencia aún no tiene un responsable asignado.");
+        }
+        
         incidencia.setEstado(nuevoEstado);
+        
+        String nuevaAlerta = evaluarAlertaClimatica(incidencia.getUbicacionId());
+        incidencia.setAlertaClima(nuevaAlerta);
+        
         Incidencias actualizada = incidenciasRepository.save(incidencia);
 
-        registrarHistorial(actualizada, nuevoEstado, comentarios, usuarioModificador);
+        registrarHistorial(actualizada, nuevoEstado, comentarios, usuarioModificador, nuevaAlerta);
         
         if ((nuevoEstado == Estado.RESUELTO || nuevoEstado == Estado.CERRADO) && incidencia.getPersonalId() != null) {
             try {
@@ -148,20 +146,21 @@ public class IncidenciasService {
         Incidencias actualizada = incidenciasRepository.save(incidencia);
 
         // 4. Guardar historial y bloquear personal
-        registrarHistorial(actualizada, actualizada.getEstado(), "Personal asignado: " + personal.getNombre(), usuarioAsignador);
+        registrarHistorial(actualizada, actualizada.getEstado(), "Personal asignado: " + personal.getNombre(), usuarioAsignador, actualizada.getAlertaClima());
         gestionClient.cambiarDisponibilidad(personalId, false);
         
         return convertirADTO(actualizada);
     }
     
     // Método de ayuda para registrar en el historial
-    private void registrarHistorial(Incidencias incidencia, Estado estado, String comentarios, Long usuarioModificador) {
+    private void registrarHistorial(Incidencias incidencia, Estado estado, String comentarios, Long usuarioModificador, String alertaClima) {
         HistorialEstados historial = new HistorialEstados();
         historial.setIncidencia(incidencia);
         historial.setEstado(estado);
         historial.setFechaCambio(LocalDateTime.now());
         historial.setComentarios(comentarios);
         historial.setUsuarioModificador(usuarioModificador);
+        historial.setAlertaClima(alertaClima);
         historialRepository.save(historial);
     }
     
@@ -178,7 +177,28 @@ public class IncidenciasService {
         dto.setUbicacionId(incidencia.getUbicacionId());
         dto.setDepartamentoId(incidencia.getDepartamentoId());
         dto.setPersonalId(incidencia.getPersonalId());
+        dto.setAlertaClima(incidencia.getAlertaClima());
         return dto;
+    }
+    
+    private String evaluarAlertaClimatica(Long ubicacionId) {
+        try {
+            UbicacionResponseDTO ubicacion = ubicacionClient.obtenerUbicacionPorId(ubicacionId);
+            
+            ClimaResponseDTO clima = climaClient.obtenerClimaActual(
+                    ubicacion.getLatitud(), ubicacion.getLongitud(), apiKey, "es", "metric"
+            );
+            
+            String condicion = clima.getCondicionPrincipal().toLowerCase();
+            
+            if (condicion.contains("tormenta") || condicion.contains("lluvia")) {
+                return "Alerta climática: No se recomienda enviar cuadrillas para reparación debido al clima (" + condicion + ").";
+            }
+        } catch (Exception e) {
+            // Buena práctica: Si falla la API del clima, no bloqueamos la operación
+            System.out.println("No se pudo obtener el clima: " + e.getMessage());
+        }
+        return null; // Si no hay lluvia/tormenta o si falló la API, retorna null
     }
    
 }

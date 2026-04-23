@@ -46,4 +46,7 @@ public class HistorialEstados {
     
     @Column(name = "usuario_modificador")
     private Long usuarioModificador;
+    
+    @Column(name = "alerta_clima", length = 250)
+    private String alertaClima;
 }

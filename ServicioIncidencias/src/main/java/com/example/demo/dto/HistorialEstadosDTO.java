@@ -21,5 +21,6 @@ public class HistorialEstadosDTO {
     private LocalDateTime fechaCambio;
     private String comentarios;
     private Long usuarioModificador;
+    private String alertaClima;
 
 }
