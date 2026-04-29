@@ -16,6 +16,7 @@ import com.example.demo.dto.CuadrillaResponseDTO;
 import com.example.demo.dto.IncidenciasDTO;
 import com.example.demo.dto.PersonalResponseDTO;
 import com.example.demo.dto.UbicacionResponseDTO;
+import com.example.demo.dto.ZonaEstadisticaDTO;
 import com.example.demo.entity.Estado;
 import com.example.demo.entity.HistorialEstados;
 import com.example.demo.entity.Incidencias;
@@ -70,11 +71,31 @@ public class IncidenciasService {
                 .collect(Collectors.toList());
     }
     
+    // Consultar incidencias filtradas por Tipo (Bache, Fuga, etc.)
+    public List<IncidenciasDTO> obtenerPorTipo(Long tipoId) {
+        return incidenciasRepository.findByTipoIncidenciaId(tipoId).stream()
+                .map(this::convertirADTO)
+                .collect(Collectors.toList());
+    }
+    
     // Consultar incidencia por ID
     public IncidenciasDTO obtenerPorId(Long id) {
         Incidencias incidencia = incidenciasRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Incidencia no encontrada con ID: " + id));
         return convertirADTO(incidencia);
+    }
+    
+    // Consultar incidencias filtradas por Ubicación (Colonia)
+    public List<IncidenciasDTO> obtenerPorUbicacion(Long ubicacionId) {
+        return incidenciasRepository.findByUbicacionId(ubicacionId).stream()
+                .map(this::convertirADTO)
+                .collect(Collectors.toList());
+    }
+    
+    // Consultar zonas con más incidencias de un tipo específico (ej. Baches)
+    public List<ZonaEstadisticaDTO> obtenerZonasConMasBaches() {
+        // El ID 1 corresponde a "BACHE" según tu catálogo
+        return incidenciasRepository.countIncidenciasPorZona(1L);
     }
     
     // Cambiar el estado de la incidencia y registrar en bitácora
@@ -200,5 +221,4 @@ public class IncidenciasService {
         }
         return null; // Si no hay lluvia/tormenta o si falló la API, retorna null
     }
-   
 }

@@ -7,5 +7,5 @@ import com.example.demo.entity.CatalogoTipoIncidencias;
 
 @Repository
 public interface CatalogoTipoIncidenciasRepository extends JpaRepository<CatalogoTipoIncidencias, Long> {
-
+	
 }

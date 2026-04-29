@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {
-	    "com.example.demo",         // Tu paquete actual
-	    "com.ayuntamiento.security_lib"   // El paquete de tu LIBRERÍA
+	    "com.example.demo",         // Paquete actual
+	    "com.ayuntamiento.security_lib"   // LIBRERÍA
 	})
 @EnableFeignClients
 public class ServicioIncidenciasApplication {

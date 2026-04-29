@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.CatalogoTipoIncidenciasDTO;
 import com.example.demo.dto.IncidenciasDTO;
+import com.example.demo.dto.ZonaEstadisticaDTO;
 import com.example.demo.entity.Estado;
+import com.example.demo.service.CatalogoTipoIncidenciasService;
 import com.example.demo.service.IncidenciasService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class IncidenciasController {
 	
 	private final IncidenciasService incidenciasService;
+	private final CatalogoTipoIncidenciasService service;
 	
     // 1. Crear incidencia
 	@PostMapping
@@ -71,4 +75,27 @@ public class IncidenciasController {
         return ResponseEntity.ok(actualizada);
     }
     
+    // Obtener todos los tipos de incidencias (Bache, Fuga, etc.)
+    @GetMapping("/catalogos-tipos")
+    public ResponseEntity<List<CatalogoTipoIncidenciasDTO>> obtenerTipos() {
+        return ResponseEntity.ok(service.obtenerTodos());
+    }	
+    
+    // Obtener incidencias por Tipo (Bache, Fuga, etc.)
+    @GetMapping("/tipo/{tipoId}")
+    public ResponseEntity<List<IncidenciasDTO>> obtenerPorTipo(@PathVariable Long tipoId) {
+        return ResponseEntity.ok(incidenciasService.obtenerPorTipo(tipoId));
+    }
+    
+    // Obtener incidencias por Ubicación/Colonia
+    @GetMapping("/incidencias-por-colonia/{ubicacionId}")
+    public ResponseEntity<List<IncidenciasDTO>> obtenerPorUbicacion(@PathVariable Long ubicacionId) {
+        return ResponseEntity.ok(incidenciasService.obtenerPorUbicacion(ubicacionId));
+    }
+    
+    
+    @GetMapping("/estadisticas/zonas-baches")
+    public ResponseEntity<List<ZonaEstadisticaDTO>> obtenerRankingBaches() {
+        return ResponseEntity.ok(incidenciasService.obtenerZonasConMasBaches());
+    }
 }
