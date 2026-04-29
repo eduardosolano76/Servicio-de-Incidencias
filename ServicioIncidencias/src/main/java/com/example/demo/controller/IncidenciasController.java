@@ -93,7 +93,7 @@ public class IncidenciasController {
         return ResponseEntity.ok(incidenciasService.obtenerPorUbicacion(ubicacionId));
     }
     
-    
+    // Obtener ranking de zonas con más baches
     @GetMapping("/estadisticas/zonas-baches")
     public ResponseEntity<List<ZonaEstadisticaDTO>> obtenerRankingBaches() {
         return ResponseEntity.ok(incidenciasService.obtenerZonasConMasBaches());
